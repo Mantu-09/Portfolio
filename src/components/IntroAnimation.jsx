@@ -4,13 +4,13 @@ import { MorphSVGPlugin } from "gsap/MorphSVGPlugin";
 
 gsap.registerPlugin(MorphSVGPlugin);
 
-export default function IntroAnimation({ onFinish }) {
-  const greetings = [
-    "Hello", "नमस्ते", "Hola", "Bonjour",
-    "Ciao", "Olá", "Здравствуйте",
-    "Merhaba", "Γειά", "Hej", "Hallo", "Salam"
-  ];
+const greetings = [
+  "Hello", "नमस्ते", "Hola", "Bonjour",
+  "Ciao", "Olá", "Здравствуйте",
+  "Merhaba", "Γειά", "Hej", "Hallo", "Salam"
+];
 
+export default function IntroAnimation({ onFinish }) {
   const [index, setIndex] = useState(0);
   const overlayRef = useRef(null);
   const greetingRef = useRef(null);

@@ -1,75 +1,110 @@
-📌 Vivek Bytes
+# Mantu Kumar Portfolio
 
-Vivek Bytes is a personal portfolio website that showcases web development projects, skills, and professional background. It’s designed with modern UI/UX practices and deployed using Vercel for fast, global performance.
+A production-ready personal portfolio built with React + Vite and deployed on Vercel.
 
-Live demo: https://vivek-bytes.vercel.app/
+## Tech Stack
 
-🚀 About The Project
+- React 19
+- Vite
+- Tailwind CSS
+- Framer Motion
+- React Router
+- EmailJS
 
-Vivek Bytes is a responsive and interactive portfolio site built using modern web technologies like Next.js, React, Tailwind CSS, and other JavaScript libraries. It highlights professional experiences, personal projects, and links to social profiles in a clean, professional layout.
+## Features
 
-This site serves as both an online resume and a showcase of full-stack development capabilities. It’s ideal for developers and creators who want to present their technical work and background.
+- Responsive single-page portfolio sections (Home, About, Skills, Projects, Experience, Certifications, Contact)
+- Project cards with dedicated detail pages
+- Optimized static media served from public/images
+- Social preview metadata (Open Graph + Twitter)
+- Vercel SPA routing support via vercel.json
 
-💻 Built With
+## Local Development
 
-The project uses a modern tech stack optimized for performance and scalability:
+### Prerequisites
 
-Next.js – React framework for server-rendered and static web apps
+- Node.js 20+ recommended
+- npm 10+
 
-React – JavaScript UI library
+### Install and run
 
-Tailwind CSS – Utility-first CSS framework
+```bash
+npm install
+npm run dev
+```
 
-Vercel – Hosting and deployment
+The app runs on the default Vite port unless overridden.
 
-(Modify this list if your project uses additional tech like TypeScript, headless CMS, APIs, etc.)
+## Production Build
 
-🔧 Features
+```bash
+npm run lint
+npm run build
+npm run preview
+```
 
-✔ Fully responsive layout – works on desktops, tablets, and mobile devices
-✔ Fast client-side navigation and optimized performance
-✔ Clean sections for About, Projects, Skills, and Contact
-✔ Easy customization via config or props
+## Environment Variables
 
-📝 Content Structure
+Create a .env file (or configure these in Vercel Project Settings):
 
-Your site likely includes these primary sections (adjust if different):
+```env
+VITE_SERVICE_ID=
+VITE_TEMPLATE_ID=
+VITE_PUBLIC_KEY=
+```
 
-Home / Hero Intro – brief introduction and professional tagline
+Reference template file: .env.template
 
-About Me – personal bio and background
+## Deploy to Vercel
 
-Skills – tech stack and expertise areas
+1. Push this project to GitHub.
+2. Import repository into Vercel.
+3. Set Environment Variables:
+   - VITE_SERVICE_ID
+   - VITE_TEMPLATE_ID
+   - VITE_PUBLIC_KEY
+4. Build settings:
+   - Build Command: npm run build
+   - Output Directory: dist
+5. Deploy.
 
-Projects – cards linking to live apps and GitHub repos
+The project already includes vercel.json for:
 
-Contact / Socials – ways to connect with you
+- SPA rewrites to index.html for client-side routing
+- Long-term cache headers for built assets
 
-📦 Getting Started
+## Social Preview Strategy (Open Graph)
 
-To run this project locally, follow these steps:
+- Primary share image is public/og-image.png (1200x630)
+- Source artwork is public/og-image.svg
+- Metadata is configured in index.html:
+  - og:image
+  - twitter:image
+  - og:image:width
+  - og:image:height
 
-🛠 Prerequisites
+If you want a photo-based card instead, replace public/og-image.svg with a 1200x630 PNG/JPG and update the meta type accordingly.
 
-Make sure you have Node.js and a package manager installed (npm or yarn).
+## Content Update Guide
 
-🧪 Clone & Run
-git clone https://github.com/<your-username>/<repo-name>.git
-cd <repo-name>
-npm install           # or yarn
-npm run dev           # starts dev server
+### Add or update project cards
 
-Open http://localhost:3000
- in your browser.
+Edit src/data/projectsData.js:
 
-📌 Deployment
+- title, subtitle, description, badges, tech, metrics
+- liveUrl and sourceUrl
+- image path from public/images, for example: /images/bookmyappointment-banner.png
 
-This project is deployed on Vercel for easy continuous deployment:
+### Replace project images
 
-Push your code to a GitHub/GitLab/Bitbucket repo
+1. Drop image file into public/images.
+2. Update the corresponding image field in src/data/projectsData.js.
 
-Connect the repo to Vercel
+## Final Pre-Launch Checklist
 
-Configure build settings (default for Next.js)
-
-Deploy — Vercel will handle automatic builds on every push
+- npm run lint passes
+- npm run build passes
+- All project banner image paths in src/data/projectsData.js resolve correctly
+- Contact form environment variables set in Vercel
+- Replace canonical and og:url values in index.html with your final custom domain URL after go-live
+- Domain connected and HTTPS active

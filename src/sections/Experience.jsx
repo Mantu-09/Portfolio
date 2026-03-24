@@ -1,195 +1,259 @@
-// Importing React for building UI components
 import React from "react";
-// Importing motion components and scroll hooks from Framer Motion for animations
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import ResumeViewerModal from "../components/ResumeViewerModal";
 
-// Array of experience objects containing job details
-const experiences = [
-  {
-    role: "Full Stack Developer",
-    company: "Olipop (Project)",
-    duration: "Feb 2026 – Present",
-    description:
-      "Developing a modern cold drink brand website with responsive layouts using React.js and Tailwind CSS. Optimizing performance with Vite build tooling.",
-  },
-  {
-    role: "Frontend Developer",
-    company: "TeaseTrails (Project)",
-    duration: "Sep 2025 – Oct 2025",
-    description:
-      "Created a visually immersive travel website with smooth animations and interactive visuals. Improved visual storytelling using GSAP-powered animations.",
-  },
-  {
-    role: "Trainee",
-    company: "CSE Pathshala",
-    duration: "Jun 2025 – Jul 2025",
-    description:
-      "Completed advanced training in Data Structures and Object-Oriented Programming using C++. Implemented concepts like inheritance, polymorphism, and encapsulation.",
-  },
-];
+function AnimatedCounter({ value, suffix = "", durationMs = 1100 }) {
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.55 });
+  const [count, setCount] = React.useState(0);
 
-// Reusable component to render each experience item with animations
-function ExperienceItem({ exp, idx, start, end, scrollYProgress, layout }) {
-  // Animates the size of the marker (dot) as user scrolls
-  const markerScale = useTransform(scrollYProgress, [start, end], [0, 1]);
-  // Animates the opacity of the marker
-  const markerOpacity = useTransform(scrollYProgress, [start, end], [0, 1]);
-  // Animates the opacity of the card
-  const cardOpacity = useTransform(scrollYProgress, [start, end], [0, 1]);
+  React.useEffect(() => {
+    if (!isInView) {
+      return;
+    }
 
-  // Checks if card should be displayed above or below the timeline line
-  const isAbove = idx % 2 === 0;
-  // Animates vertical movement of cards for desktop layout
-  const cardY = useTransform(scrollYProgress, [start, end], [isAbove ? 30 : -30, 0]);
-  // Animates horizontal movement of cards for mobile layout
-  const cardX = useTransform(scrollYProgress, [start, end], [-24, 0]);
+    const start = performance.now();
+    let frameId = null;
 
-  // Render for Desktop layout
-  if (layout === "desktop") {
-    return (
-      <div className="relative flex-1 flex justify-center items-center min-w-0" key={`${exp.company}-${exp.role}-${idx}`}>
-        {/* Marker dot on the timeline */}
-        <motion.div
-          className="z-10 w-7 h-7 rounded-full bg-white shadow-[0_0_0_8px_rgba(255,255,255,0.1)]"
-          style={{ scale: markerScale, opacity: markerOpacity }}
-        />
-        {/* Small vertical line above or below the marker */}
-        <motion.div
-          className={`absolute ${isAbove ? "-top-8" : "-bottom-8"} w-[3px] bg-white/40`}
-          style={{ height: 40, opacity: cardOpacity }}
-        />
-        {/* Experience card with role, company, duration, description */}
-        <motion.article
-          className={`absolute ${isAbove ? "bottom-12" : "top-12"} bg-gray-900/80 backdrop-blur border border-gray-700/70 rounded-xl p-7 w-[320px] shadow-lg`}
-          style={{ opacity: cardOpacity, y: cardY, maxWidth: "90vw" }}
-          transition={{ duration: 0.4, delay: idx * 0.15 }}
-        >
-          <h3 className="text-xl font-semibold">{exp.role}</h3>
-          <p className="text-md text-gray-400 mb-3">{exp.company} | {exp.duration}</p>
-          <p className="text-md text-gray-300 break-words">{exp.description}</p>
-        </motion.article>
-      </div>
-    );
-  }
+    const tick = (now) => {
+      const progress = Math.min((now - start) / durationMs, 1);
+      setCount(Math.round(progress * value));
 
-  // Render for Mobile layout
+      if (progress < 1) {
+        frameId = window.requestAnimationFrame(tick);
+      }
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+
+    return () => {
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
+  }, [durationMs, isInView, value]);
+
   return (
-    <div key={`${exp.company}-${exp.role}-m-${idx}`} className="relative flex items-start">
-      {/* Marker dot on mobile timeline */}
-      <motion.div
-        className="absolute -left-[14px] top-3 z-10 w-7 h-7 rounded-full bg-white shadow-[0_0_0_8px_rgba(255,255,255,0.1)]"
-        style={{ scale: markerScale, opacity: markerOpacity }}
-      />
-      {/* Experience card (mobile version) */}
-      <motion.article
-        className="bg-gray-900/80 backdrop-blur border border-gray-700/70 rounded-xl p-5 w-[90vw] max-w-sm ml-6 shadow-lg"
-        style={{ opacity: cardOpacity, x: cardX }}
-        transition={{ duration: 0.4, delay: idx * 0.15 }}
-      >
-        <h3 className="text-lg font-semibold break-words">{exp.role}</h3>
-        <p className="text-sm text-gray-400 mb-2 break-words">{exp.company} | {exp.duration}</p>
-        <p className="text-sm text-gray-300 break-words">{exp.description}</p>
-      </motion.article>
-    </div>
+    <span ref={ref}>
+      {count}
+      {suffix}
+    </span>
   );
 }
 
-// Main Experience component
-const Experience = () => {
-  const sceneRef = React.useRef(null); // Ref for the scrolling section
-  const [isMobile, setIsMobile] = React.useState(false); // State to track if device is mobile
+const experiences = [
+  {
+    role: "Full Stack Developer Intern",
+    company: "Car Rental Web Application",
+    companyLogo: "",
+    location: "Remote",
+    duration: "Jun 2025 - Jul 2025",
+    summary:
+      "Built and shipped a production-ready MERN platform for end-to-end car rental operations with secure APIs and a fast, responsive interface.",
+    impact: "Improved booking workflow speed with clean UX and optimized API response handling.",
+    kpis: [
+      { label: "Secure API Modules", value: 6, suffix: "+" },
+      { label: "Core Workflows Built", value: 12, suffix: "+" },
+      { label: "Auth and Access Layers", value: 3, suffix: "" },
+    ],
+    highlights: [
+      "Designed REST APIs for vehicles, bookings, and user management using Node.js and Express.",
+      "Implemented JWT authentication and role-based access control for secure admin and user flows.",
+      "Built responsive React dashboards for booking, fleet tracking, and profile actions.",
+      "Structured MongoDB schemas and validations to keep booking data reliable and query-friendly.",
+    ],
+    skills: ["React", "Node.js", "Express", "MongoDB", "JWT", "REST API", "Tailwind CSS"],
+    projectUrl: "https://github.com/Mantu-09",
+  },
+];
 
-  // Detect window size and set isMobile state
-  React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+  },
+};
 
-  // Dynamic scene height based on device type and number of experiences
-  const SCENE_HEIGHT_VH = isMobile ? 100 * experiences.length * 1.6 : 100 * experiences.length * 1.2;
-
-  // Get scroll progress for animations
-  const { scrollYProgress } = useScroll({ target: sceneRef, offset: ["start start", "end end"] });
-
-  // Calculate thresholds for each experience card's animation start/end
-  const numExperiences = experiences.length;
-  const thresholds = React.useMemo(
-    () => Array.from({ length: numExperiences }, (_, i) => (i + 1) / numExperiences),
-    [numExperiences]
-  );
-
-  // Animate timeline line width (desktop) and height (mobile)
-  const lineWidth = useTransform(scrollYProgress, (v) => `${v * 100}%`);
-  const lineHeight = useTransform(scrollYProgress, (v) => `${v * 100}%`);
+export default function Experience() {
+  const [showResumeViewer, setShowResumeViewer] = React.useState(false);
 
   return (
-    <section id="experience" className="relative bg-black text-white">
-      {/* Main container with dynamic height */}
-      <div ref={sceneRef} style={{ height: `${SCENE_HEIGHT_VH}vh`, minHeight: "120vh" }} className="relative">
-        <div className="sticky top-0 h-screen flex flex-col">
-          {/* Section Title */}
-          <div className="shrink-0 px-6 pt-8">
-            <h2 className="text-4xl sm:text-5xl font-semibold mt-5 text-center">Experience</h2>
+    <>
+      <section
+        id="experience"
+        className="relative overflow-hidden px-4 py-24 text-white sm:px-6 lg:px-10"
+        style={{
+          background:
+            "radial-gradient(800px circle at 0% -10%, rgba(50,95,245,0.35), transparent 42%), radial-gradient(700px circle at 100% 8%, rgba(15,198,204,0.26), transparent 40%), linear-gradient(180deg, #020815 0%, #041028 55%, #031129 100%)",
+        }}
+      >
+      <div className="pointer-events-none absolute left-[-120px] top-[120px] h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute right-[-100px] top-[70px] h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+
+      <div className="relative mx-auto max-w-6xl">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.35 }}
+          variants={fadeUp}
+          className="text-center"
+        >
+          <p className="inline-flex rounded-full border border-cyan-300/40 bg-cyan-300/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100">
+            Professional Journey
+          </p>
+          <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">Experience</h2>
+          <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-blue-100/85 sm:text-base">
+            Demonstrated delivery across full stack engineering, secure backend architecture, and
+            user-focused interfaces that improve product outcomes.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => setShowResumeViewer(true)}
+              className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-cyan-400 px-5 py-2.5 text-sm font-semibold text-white"
+            >
+              View Resume
+            </button>
+            <a
+              href="/Resume.pdf"
+              download
+              className="inline-flex items-center justify-center rounded-md border border-cyan-300/45 bg-cyan-300/10 px-5 py-2.5 text-sm font-semibold text-cyan-100 transition-colors hover:bg-cyan-300/20"
+            >
+              Download Resume
+            </a>
           </div>
-          {/* Timeline container */}
-          <div className="flex-1 flex items-center justify-center px-6 pb-10">
-            {/* Desktop Timeline */}
-            <div className="relative w-full max-w-7xl hidden md:block">
-              {/* Horizontal timeline line */}
-              <div className="relative h-[6px] bg-white/15 rounded">
-                <motion.div className="absolute left-0 top-0 h-[6px] bg-white rounded origin-left" style={{ width: lineWidth }} />
-              </div>
-              {/* Experience items mapped for desktop */}
-              <div className="relative flex justify-between mt-0">
-                {experiences.map((exp, idx) => {
-                  const start = idx === 0 ? 0 : thresholds[idx - 1];
-                  const end = thresholds[idx];
-                  return (
-                    <ExperienceItem
-                      key={`${exp.company}-${exp.role}-${idx}`}
-                      exp={exp}
-                      idx={idx}
-                      start={start}
-                      end={end}
-                      scrollYProgress={scrollYProgress}
-                      layout="desktop"
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.45, delay: 0.1 }}
+          className="mt-8 flex flex-wrap justify-center gap-3"
+        >
+          <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-slate-100 sm:text-sm">
+            Full Stack Engineering
+          </span>
+          <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-slate-100 sm:text-sm">
+            Secure APIs and Auth
+          </span>
+          <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-slate-100 sm:text-sm">
+            Product-Focused Delivery
+          </span>
+        </motion.div>
+
+        <div className="relative mt-14 space-y-8">
+          <div className="absolute bottom-0 left-4 top-0 hidden w-px bg-gradient-to-b from-cyan-300/0 via-cyan-300/45 to-cyan-300/0 sm:block" />
+
+          {experiences.map((item, index) => (
+            <motion.article
+              key={`${item.role}-${item.company}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
+              className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_24px_70px_rgba(2,6,23,0.45)] backdrop-blur-md sm:ml-10 sm:p-7"
+            >
+              <div className="absolute left-[-36px] top-10 hidden h-4 w-4 rounded-full border-2 border-cyan-200 bg-cyan-400 shadow-[0_0_0_8px_rgba(56,189,248,0.18)] sm:block" />
+              <div className="absolute right-0 top-0 h-1 w-44 bg-gradient-to-r from-cyan-300/0 via-cyan-300/75 to-blue-400/0" />
+
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="flex items-start gap-3">
+                  {item.companyLogo ? (
+                    <img
+                      src={item.companyLogo}
+                      alt={`${item.company} logo`}
+                      className="h-11 w-11 rounded-lg border border-white/20 object-cover"
+                      loading="lazy"
                     />
-                  );
-                })}
+                  ) : (
+                    <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-cyan-300/45 bg-cyan-300/10 text-sm font-bold text-cyan-100">
+                      {item.company.slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="text-2xl font-bold tracking-tight text-white">{item.role}</h3>
+                    <p className="mt-1 text-sm text-cyan-100/90">
+                      {item.company} | {item.location}
+                    </p>
+                  </div>
+                </div>
+                <span className="rounded-full border border-cyan-300/45 bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+                  {item.duration}
+                </span>
               </div>
-            </div>
-            {/* Mobile Timeline */}
-            <div className="relative w-full max-w-md md:hidden">
-              {/* Vertical timeline line */}
-              <div className="absolute left-0 top-0 bottom-0 w-[6px] bg-white/15 rounded">
-                <motion.div className="absolute top-0 left-0 w-[6px] bg-white rounded origin-top" style={{ height: lineHeight }} />
+
+              <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                {item.kpis.map((kpi) => (
+                  <div
+                    key={`${item.company}-${kpi.label}`}
+                    className="rounded-lg border border-slate-700/80 bg-slate-900/65 px-3 py-2"
+                  >
+                    <p className="text-xl font-bold text-cyan-100">
+                      <AnimatedCounter value={kpi.value} suffix={kpi.suffix} />
+                    </p>
+                    <p className="mt-0.5 text-[11px] uppercase tracking-[0.08em] text-slate-300">
+                      {kpi.label}
+                    </p>
+                  </div>
+                ))}
               </div>
-              {/* Experience items mapped for mobile */}
-              <div className="relative flex flex-col gap-10 ml-10 mt-6 pb-28">
-                {experiences.map((exp, idx) => {
-                  const start = idx === 0 ? 0 : thresholds[idx - 1];
-                  const end = thresholds[idx];
-                  return (
-                    <ExperienceItem
-                      key={`${exp.company}-${exp.role}-m-${idx}`}
-                      exp={exp}
-                      idx={idx}
-                      start={start}
-                      end={end}
-                      scrollYProgress={scrollYProgress}
-                      layout="mobile"
-                    />
-                  );
-                })}
+
+              <p className="mt-5 text-sm leading-relaxed text-slate-200/90 sm:text-base">{item.summary}</p>
+              <p className="mt-3 rounded-lg border border-emerald-300/30 bg-emerald-300/10 px-4 py-3 text-sm font-medium text-emerald-100">
+                Recruiter Signal: {item.impact}
+              </p>
+
+              <ul className="mt-5 space-y-2 text-sm text-slate-200/90">
+                {item.highlights.map((point) => (
+                  <li key={point} className="flex items-start gap-2">
+                    <span className="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-cyan-300" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {item.skills.map((skill) => (
+                  <span
+                    key={`${item.role}-${skill}`}
+                    className="rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1 text-xs font-medium text-slate-100"
+                  >
+                    {skill}
+                  </span>
+                ))}
               </div>
-            </div>
-          </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href={item.projectUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-w-28 items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-white"
+                >
+                  View Work
+                </a>
+                <a
+                  href="#contact"
+                  className="inline-flex min-w-28 items-center justify-center rounded-md border border-white/30 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-white/10"
+                >
+                  Contact Me
+                </a>
+              </div>
+            </motion.article>
+          ))}
         </div>
       </div>
     </section>
-  );
-};
 
-export default Experience; // Exporting Experience component
+      <ResumeViewerModal
+        isOpen={showResumeViewer}
+        onClose={() => setShowResumeViewer(false)}
+        resumeUrl="/Resume.pdf"
+        title="Resume Preview"
+      />
+    </>
+  );
+}

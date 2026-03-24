@@ -1,191 +1,179 @@
 
-
 import React from "react";
-import { motion, useScroll, AnimatePresence } from "framer-motion";
-// motion: for animating elements
-// useScroll: to track scroll position
-// AnimatePresence: to animate components when mounting/unmounting
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
-// Importing project images (desktop & mobile versions)
-import img1 from "../assets/img1.JPG";
-import img2 from "../assets/img2.JPG";
-import img3 from "../assets/img3.JPG";
-import photo1 from "../assets/photo1.JPG";
-import photo2 from "../assets/photo2.PNG";
-import photo3 from "../assets/photo3.png";
-import olipopImg from "../assets/Whisk_background.jpeg";
-import trailImg from "../assets/trail.jpeg";
+import { PROJECTS } from "../data/projectsData";
 
-const MH3 = motion.h3;
-// Shortcut for <motion.h3> for easier typing
-
-// 🔹 Custom Hook: Detects if screen size matches "mobile"
-const useIsMobile = (query = "(max-width: 639px)") => {
-  const [isMobile, setIsMobile] = React.useState(
-    typeof window !== "undefined" && window.matchMedia(query).matches
-    // Checks if the screen width is <= 639px (mobile breakpoint)
-  );
-
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mql = window.matchMedia(query); // Media query list
-    const handler = (e) => setIsMobile(e.matches); // Update state when query changes
-    mql.addEventListener?.("change", handler) || mql.addListener(handler);
-    // Add correct event listener (modern OR fallback)
-
-    setIsMobile(mql.matches); // Initialize with current screen size
-    return () =>
-      mql.removeEventListener?.("change", handler) || mql.removeListener(handler);
-    // Cleanup event listener
-  }, [query]);
-
-  return isMobile;
+const sectionMotion = {
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
+  },
 };
 
 export default function Projects() {
-  const isMobile = useIsMobile();
-  // Detect if the user is on a mobile screen
+  const [activeFilter, setActiveFilter] = React.useState("All Projects");
 
-  // 🔹 List of project objects (dynamic images based on screen size)
-  const projects = React.useMemo(
+  const filters = React.useMemo(
     () => [
-      {
-        title: "Olipop",
-        link: "https://github.com/VivekS51/OLIPOP-DRINK",
-        bgColor: "#0d4d3d",
-        image: isMobile ? photo1 : olipopImg, // Updated image
-      },
-      {
-        title: "TeaseTrails",
-        link: "https://github.com/VivekS51/Final-Destination",
-        bgColor: "#5229ae",
-        image: isMobile ? photo2 : trailImg, // Updated image
-      },
+      "All Projects",
+      ...new Set(PROJECTS.flatMap((project) => [project.category, ...project.badges])),
     ],
-    [isMobile]
-    // Memoize to prevent recalculating unless screen size changes
+    []
   );
 
-  const sceneRef = React.useRef(null);
-  // Reference to the whole projects section (used for scroll tracking)
+  const filteredProjects = React.useMemo(() => {
+    if (activeFilter === "All Projects") {
+      return PROJECTS;
+    }
 
-  const { scrollYProgress } = useScroll({
-    target: sceneRef,
-    offset: ["start start", "end end"],
-    // Scroll progress is 0 when section top hits viewport top and 1 at the end
-  });
-
-  const thresholds = projects.map((_, i) => (i + 1) / projects.length);
-  // Array of thresholds to switch between projects as user scrolls
-  const [activeIndex, setActiveIndex] = React.useState(0);
-  // Keeps track of which project is currently active
-
-  // 🔹 Update activeIndex as user scrolls
-  React.useEffect(() => {
-    const unsubscribe = scrollYProgress.onChange((v) => {
-      const idx = thresholds.findIndex((t) => v <= t);
-      // Find the first threshold that is greater than or equal to scroll progress
-      setActiveIndex(idx === -1 ? thresholds.length - 1 : idx);
-      // If not found, show the last project
-    });
-    return () => unsubscribe();
-    // Cleanup scroll listener
-  }, [scrollYProgress, thresholds]);
-
-  const activeProject = projects[activeIndex];
-  // Currently displayed project
+    return PROJECTS.filter(
+      (project) => project.category === activeFilter || project.badges.includes(activeFilter)
+    );
+  }, [activeFilter]);
 
   return (
     <section
       id="projects"
-      ref={sceneRef}
-      className="relative text-white"
+      className="relative overflow-hidden px-4 py-24 sm:px-6 lg:px-12"
       style={{
-        height: `${100 * projects.length}vh`,
-        // Section height = 100vh per project (makes scroll-based transitions work) 
-        backgroundColor: activeProject.bgColor,
-        // Background changes color based on active project
-        transition: "background-color 400ms ease",
+        background:
+          "radial-gradient(1200px circle at 10% -10%, rgba(29,109,255,0.32), transparent 45%), radial-gradient(900px circle at 95% 20%, rgba(11,188,193,0.26), transparent 46%), linear-gradient(180deg, #05112f 0%, #061739 60%, #03102a 100%)",
       }}
     >
-      {/* Sticky container keeps content fixed while scrolling */}
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center">
+      <div className="mx-auto w-full max-w-7xl">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.35 }}
+          variants={sectionMotion}
+          className="text-center"
+        >
+          <p className="mb-3 inline-flex rounded-full border border-cyan-300/40 bg-cyan-300/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100">
+            Selected Work
+          </p>
+          <h2 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Featured Projects
+          </h2>
+          <p className="mx-auto mt-5 max-w-3xl text-sm leading-relaxed text-blue-100/85 sm:text-base">
+            A curated showcase of web applications, APIs, and immersive interfaces. Add any number
+            of projects in the data array and this section scales automatically.
+          </p>
+        </motion.div>
 
-        {/* Section Title */}
-        <h2 className={`text-3xl font-semibold z-10 text-center ${isMobile ? "mt-4" : "mt-8"}`}>
-          My Work
-        </h2>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.45, delay: 0.1 }}
+          className="mt-10 flex flex-wrap items-center justify-center gap-3"
+        >
+          {filters.map((filter) => {
+            const isActive = filter === activeFilter;
 
-        {/* Main Project Display Area */}
-        <div className={`relative w-full flex-1 flex items-center justify-center ${isMobile ? "-mt-4" : ""}`}>
-          {projects.map((project, idx) => (
-            <div
-              key={project.title}
-              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ${activeIndex === idx ? "opacity-100 z-20" : "opacity-0 z-0 sm:z-10"
-                }`}
-              style={{ width: "85%", maxWidth: "1200px" }}
-            >
-              {/* Animate project title when switching */}
-              <AnimatePresence mode="wait">
-                {activeIndex === idx && (
-                  <MH3
-                    key={project.title}
-                    initial={{ opacity: 0, y: -30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 30 }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                    className={`block text-center text-[clamp(2rem,6vw,5rem)] text-white/95 sm:absolute sm:-top-21 sm:left-[35%] lg:left-[-5%] sm:mb-0 font-bangers italic font-semibold ${isMobile ? "-mt-25" : ""
-                      }`}
-                    style={{ zIndex: 5, textAlign: isMobile ? "center" : "left" }}
-                  >
-                    {project.title}
-                  </MH3>
-                )}
-              </AnimatePresence>
-
-              {/* Project Image Wrapper */}
-              <div
-                className={`relative w-full overflow-hidden bg-black/20 shadow-2xl md:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.7)] ${isMobile ? "mb-6 rounded-lg" : "mb-10 sm:mb-12 rounded-xl"
-                  } h-[62vh] sm:h-[66vh]`}
-                style={{ zIndex: 10, transition: "box-shadow 250ms ease" }}
+            return (
+              <button
+                key={filter}
+                type="button"
+                onClick={() => setActiveFilter(filter)}
+                className="rounded-full border px-4 py-2 text-xs font-semibold tracking-wide transition-all sm:text-sm"
+                style={{
+                  borderColor: isActive ? "rgba(87, 195, 255, 0.9)" : "rgba(148, 163, 184, 0.35)",
+                  background: isActive
+                    ? "linear-gradient(90deg, rgba(47,105,255,0.85), rgba(20,177,197,0.85))"
+                    : "rgba(15, 23, 42, 0.6)",
+                  color: "#f8fafc",
+                  boxShadow: isActive ? "0 12px 28px rgba(24, 120, 255, 0.35)" : "none",
+                }}
               >
-                {/* Project Image */}
+                {filter}
+              </button>
+            );
+          })}
+        </motion.div>
+
+        <div className="mt-12 grid grid-cols-1 gap-7 lg:grid-cols-2">
+          {filteredProjects.map((project, index) => (
+            <motion.article
+              key={project.id}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.45, delay: index * 0.05 }}
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-slate-950/70 shadow-[0_26px_70px_rgba(2,6,23,0.45)] backdrop-blur-md"
+            >
+              <div className="relative aspect-video overflow-hidden">
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover drop-shadow-xl md:drop-shadow-2xl"
-                  style={{
-                    position: "relative",
-                    zIndex: 10,
-                    filter: "drop-shadow(0 16px 40px rgba(0,0,0,0.65))",
-                    transition: "filter 200ms ease",
-                  }}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
-                {/* Subtle gradient overlay for better readability */}
-                <div
-                  className="pointer-events-none absolute inset-0"
-                  style={{
-                    zIndex: 11,
-                    background: "linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0) 40%)",
-                  }}
-                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/15 to-transparent" />
+                <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+                  {project.badges.map((badge) => (
+                    <span
+                      key={`${project.id}-${badge}`}
+                      className="rounded-full border border-cyan-300/45 bg-slate-900/75 px-3 py-1 text-[11px] font-semibold text-cyan-100"
+                    >
+                      {badge}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
 
-        {/* View Project Button */}
-        <div className={`absolute ${isMobile ? "bottom-20" : "bottom-10"}`}>
-          <a
-            href={activeProject?.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-6 py-3 font-semibold rounded-lg bg-white text-black hover:bg-gray-200 transition-all"
-            aria-label={`View ${activeProject?.title}`}
-          >
-            Github
-          </a>
+              <div className="space-y-4 p-5 sm:p-6">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200/80">
+                    {project.category} | {project.duration}
+                  </p>
+                  <h3 className="mt-2 text-2xl font-bold text-white">{project.title}</h3>
+                  <p className="mt-1 text-sm text-blue-100/80">{project.subtitle}</p>
+                </div>
+
+                <p className="text-sm leading-relaxed text-slate-200/85">{project.description}</p>
+
+                <div className="flex flex-wrap gap-2">
+                  {project.tech.map((techItem) => (
+                    <span
+                      key={`${project.id}-${techItem}`}
+                      className="rounded-full border border-slate-700 bg-slate-900/65 px-2.5 py-1 text-[11px] font-medium text-slate-100"
+                    >
+                      {techItem}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap gap-3 pt-1">
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-w-28 items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5"
+                  >
+                    Live Demo
+                  </a>
+                  <a
+                    href={project.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-w-28 items-center justify-center rounded-md border border-blue-200/40 bg-transparent px-4 py-2 text-sm font-semibold text-blue-100 transition-colors hover:bg-white/10"
+                  >
+                    Source Code
+                  </a>
+                  <Link
+                    to={`/projects/${project.id}`}
+                    className="inline-flex min-w-28 items-center justify-center rounded-md border border-cyan-300/55 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition-colors hover:bg-cyan-300/20"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              </div>
+            </motion.article>
+          ))}
         </div>
       </div>
     </section>

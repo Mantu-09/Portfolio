@@ -54,14 +54,6 @@ const MusicPlayer = () => {
     audio.addEventListener("canplay", onCanPlay);
   };
 
-  // Play a specific track (called by click gestures)
-  const playTrack = (index) => {
-    setCurrentTrackIndex(index);
-    setIsPlaying(true);
-    setInfoText("Double tap to change the music");
-    setSourceAndMaybePlay(playlist[index], true);
-  };
-
   // Toggle play/pause
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -109,9 +101,7 @@ const MusicPlayer = () => {
     audio.volume = 0.6;
     audio.muted = false;
 
-    // Dev-time diagnostics (optional; remove in prod)
     const onError = () => {
-      // eslint-disable-next-line no-console
       console.warn("Audio error loading/playing:", audio.error);
     };
     audio.addEventListener("error", onError);

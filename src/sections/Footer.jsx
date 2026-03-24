@@ -15,10 +15,10 @@ import {
  * - Add/remove items if you want more or fewer social platforms
  */
 const socials = [
-  { Icon: FaLinkedinIn, label: "LinkedIn", href: "https://linkedin.com/in/viveks51" },
-  { Icon: FaGithub, label: "GitHub", href: "https://github.com/VivekS51" },
-  { Icon: FaEnvelope, label: "Email", href: "mailto:viveksagar51@gmail.com" },
-  { Icon: FaWhatsapp, label: "WhatsApp", href: "https://wa.me/918002183838" },
+  { Icon: FaLinkedinIn, label: "LinkedIn", href: "https://www.linkedin.com/in/mantu-kumar2004" },
+  { Icon: FaGithub, label: "GitHub", href: "https://github.com/Mantu-09" },
+  { Icon: FaEnvelope, label: "Email", href: "mailto:mantukumar0003571@gmail.com" },
+  { Icon: FaWhatsapp, label: "WhatsApp", href: "https://wa.me/917366832058" },
 ];
 
 /**
@@ -56,21 +56,19 @@ const Footer = () => {
         className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-10 py-16 md:py-20 flex flex-col items-center text-center space-y-6"
       >
         {/* --- Personal Name / Branding --- */}
-        {/* Change text to your name or brand */}
-        <div className="w-full">
+        <div className="w-full overflow-hidden">
           <h1
-            className="font-bangers font-semibold leading-none text-white text-center select-none"
+            className="footer-name font-bangers font-semibold leading-none text-white text-center select-none"
             style={{
-              fontSize: "clamp(3rem, 5vw, 14rem)", // Responsive scaling
+              fontSize: "clamp(2.5rem, 10vw, 14rem)",
               letterSpacing: "0.02em",
               lineHeight: 0.9,
               paddingLeft: "3vw",
               paddingRight: "3vw",
-              whiteSpace: "nowrap",
               textShadow: "0 2px 18px rgba(0,0,0,0.45)",
             }}
           >
-            Vivek Sagar
+            Mantu Kumar
           </h1>
         </div>
 
@@ -113,7 +111,7 @@ const Footer = () => {
         {/* --- Copyright / Trademark --- */}
         {/* Auto-updates year dynamically */}
         <p className="text-xs text-gray-400">
-          © {new Date().getFullYear()} Vivek Sagar. All rights reserved.
+          © {new Date().getFullYear()} Mantu Kumar. All rights reserved.
         </p>
       </motion.div>
     </footer>

@@ -1,214 +1,187 @@
-import { FaJava, FaReact, FaAws, FaDocker } from 'react-icons/fa';
-import { SiNextdotjs, SiTypescript, SiTailwindcss, SiFastapi, SiPython, SiMongodb, SiAngular, SiCplusplus, SiMysql, SiJavascript, SiKubernetes, SiHtml5, SiCss3, SiSass, SiBootstrap } from 'react-icons/si';
-import { VscAzure } from 'react-icons/vsc';
-import { DiNodejsSmall } from 'react-icons/di';
-import { motion, useMotionValue } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useMemo } from "react";
+import { motion } from "framer-motion";
+import { FaPython, FaReact } from "react-icons/fa";
+import {
+  SiBootstrap,
+  SiCss3,
+  SiExpress,
+  SiHtml5,
+  SiJavascript,
+  SiMongodb,
+  SiMysql,
+  SiNodedotjs,
+  SiRedux,
+  SiTailwindcss,
+  SiTypescript,
+} from "react-icons/si";
 
+const groupedSkills = [
+  {
+    title: "Frontend",
+    emphasis: "Crafting fast and polished user experiences",
+    items: [
+      { icon: FaReact, name: "React", level: 90, color: "#61DAFB" },
+      { icon: SiJavascript, name: "JavaScript", level: 90, color: "#F7DF1E" },
+      { icon: SiTypescript, name: "TypeScript", level: 80, color: "#3178C6" },
+      { icon: SiRedux, name: "Redux", level: 82, color: "#764ABC" },
+      { icon: SiTailwindcss, name: "Tailwind", level: 87, color: "#06B6D4" },
+      { icon: SiBootstrap, name: "Bootstrap", level: 88, color: "#7952B3" },
+      { icon: SiHtml5, name: "HTML", level: 95, color: "#E34F26" },
+      { icon: SiCss3, name: "CSS", level: 95, color: "#1572B6" },
+    ],
+  },
+  {
+    title: "Backend and Data",
+    emphasis: "Reliable API design and scalable data models",
+    items: [
+      { icon: SiNodedotjs, name: "Node.js", level: 86, color: "#339933" },
+      { icon: SiExpress, name: "Express", level: 82, color: "#86efac" },
+      { icon: SiMongodb, name: "MongoDB", level: 83, color: "#47A248" },
+      { icon: SiMysql, name: "MySQL", level: 84, color: "#4479A1" },
+      { icon: FaPython, name: "Python", level: 80, color: "#3776AB" },
+    ],
+  },
+];
+
+const softSkills = [
+  "Problem Solving",
+  "Product Thinking",
+  "Communication",
+  "Adaptability",
+  "Team Collaboration",
+  "Leadership",
+];
 
 export default function Skills() {
-
-  const skills = [
-    { icon: <SiCplusplus />, name: "C++", color: "#00599C", level: 85 },
-    { icon: <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/C_Programming_Language.svg" alt="C" className="w-12 h-12" />, name: "C", color: "#A8B9CC", level: 80 },
-    { icon: <SiJavascript />, name: "JavaScript", color: "#F7DF1E", level: 90 },
-    { icon: <SiPython />, name: "Python", color: "#3776AB", level: 85 },
-    { icon: <SiHtml5 />, name: "HTML", color: "#E34F26", level: 95 },
-    { icon: <SiCss3 />, name: "CSS", color: "#1572B6", level: 95 },
-    { icon: <SiSass />, name: "SCSS", color: "#CC6699", level: 85 },
-    { icon: <SiBootstrap />, name: "Bootstrap", color: "#7952B3", level: 80 },
-    { icon: <FaReact />, name: "React", color: "#61DAFB", level: 90 },
-    { icon: <SiTailwindcss />, name: "Tailwind CSS", color: "#06B6D4", level: 95 },
-    { icon: <SiMysql />, name: "MySQL", color: "#4479A1", level: 80 },
-    { icon: <SiNextdotjs />, name: "Next.js", color: "#FFFFFF", level: 85 },
-    { icon: <DiNodejsSmall />, name: "Node.js", color: "#339933", level: 80 },
-    { icon: <FaAws />, name: "AWS", color: "#FF9900", level: 75 },
-    { icon: <VscAzure />, name: "Azure", color: "#0078D4", level: 70 },
-    { icon: <FaDocker />, name: "Docker", color: "#2496ED", level: 75 },
-    { icon: <SiKubernetes />, name: "Kubernetes", color: "#326CE5", level: 65 },
-    { icon: <SiTypescript />, name: "TypeScript", color: "#3178C6", level: 80 },
-  ];
-  const repeated = [...skills, ...skills]
-
-  const [dir, setDir] = useState(-1);
-  const [active, setActive] = useState(false);
-  const sectionRef = useRef(null);
-  const trackRef = useRef(null);
-  const touchY = useRef(null);
-  const x = useMotionValue(0);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const io = new IntersectionObserver((
-      [entry]) => {
-      setActive(entry.isIntersecting && entry.intersectionRatio > 0.1);
-    },
-      { threshold: [0.1] }
-    )
-    io.observe(el);
-    return () => io.disconnect();
-
-  }, [])
-
-  useEffect(() => {
-    if (!active) return;
-
-    const onWheel = (e) => setDir(e.deltaY > 0 ? -1 : 1);
-    const onTouchStart = (e) => (touchY.current = e.touches[0].clientY);
-    const onTouchMove = (e) => {
-      if (touchY.current == null) return;
-      const delta = e.touches[0].clientY - touchY.current;
-      setDir(delta > 0 ? 1 : -1);
-      touchY.current = e.touches[0].clientY;
-    };
-    window.addEventListener('wheel', onWheel, { passive: true });
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
-
-    return () => {
-      window.removeEventListener('wheel', onWheel);
-      window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchmove', onTouchMove);
-    }
-  }, [active]);
-
-
-
-  useEffect(() => {
-    let id;
-    let last = performance.now();
-    const SPEED = 80;
-
-    const tick = (now) => {
-      const dt = (now - last) / 1000;
-      last = now;
-      let next = x.get() + SPEED * dir * dt;
-      const loop = trackRef.current?.scrollWidth / 2 || 0;
-
-      if (loop) {
-        if (next <= -loop) next += loop;
-        if (next >= 0) next -= loop;
-      }
-      x.set(next)
-      id = requestAnimationFrame(tick)
-    }
-    id = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(id);
-  }, [dir, x]);
-
+  const topMetrics = useMemo(
+    () => [
+      { label: "Core Technologies", value: "14+" },
+      { label: "Full Stack Focus", value: "MERN" },
+      { label: "Delivery Style", value: "Impact Driven" },
+    ],
+    []
+  );
 
   return (
-    <section id="skills"
-      ref={sectionRef}
-      className="h-1/2 w-full pb-8 flex flex-col items-center justify-center relative bg-black text-white overflow-hidden">
-      <div className='absolute inset-0 pointer-events-none'>
-        <div className='absolute top-1/4 left-0 w-[300px] h-[300px] rounded-full bg-gradient-to-r from-[#302b63] via-[#00bf8f] to-[#1cd8d2]
-opacity-20 blur-[120px] animate-pulse
-'/>
-        <div className='absolute bottom-1/4 right-0 w-[300px] h-[300px] rounded-full bg-gradient-to-r from-[#302b63] via-[#00bf8f] to-[#1cd8d2]
-opacity-20 blur-[120px] animate-pulse delay-500
-' />
+    <section
+      id="skills"
+      className="relative overflow-hidden px-4 py-24 text-white sm:px-6 lg:px-10"
+      style={{
+        background:
+          "radial-gradient(900px circle at 8% -8%, rgba(29,109,255,0.3), transparent 43%), radial-gradient(900px circle at 95% 18%, rgba(14,201,207,0.24), transparent 45%), linear-gradient(180deg, #020914 0%, #041126 58%, #031329 100%)",
+      }}
+    >
+      <div className="pointer-events-none absolute left-[-100px] top-20 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl" />
+      <div className="pointer-events-none absolute right-[-120px] top-28 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
 
-      </div>
-
-      <motion.h2 className='text-4xl mt-5 sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#1cd8d2] via-[#00bf8f] to-[#302b63] z-10'
-        initial={{ opacity: 0, y: -30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        My Skills
-      </motion.h2>
-      <motion.p className='mt-2 mb-8 text-white/90 text-base sm:text-lg z-10'
-        initial={{ opacity: 0, y: -10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-
-      >
-        Modern Applications | Modern Technologies
-      </motion.p>
-
-      <div className='relative w-full overflow-hidden pt-28 pb-10'>
+      <div className="relative mx-auto w-full max-w-7xl">
         <motion.div
-          ref={trackRef}
-          className='flex gap-10 text-6xl text-gray-400'
-          style={{ x, whiteSpace: "nowrap", willChange: "transform" }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
         >
+          <p className="inline-flex rounded-full border border-cyan-300/40 bg-cyan-300/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100">
+            Skills Snapshot
+          </p>
+          <h2 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Engineering Skills
+          </h2>
+          <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-blue-100/85 sm:text-base">
+            A practical blend of frontend architecture, backend engineering, and collaborative
+            delivery skills focused on building production-ready products.
+          </p>
+        </motion.div>
 
-          {repeated.map((s, i) => (
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.45, delay: 0.1 }}
+          className="mt-8 grid gap-3 sm:grid-cols-3"
+        >
+          {topMetrics.map((metric) => (
             <div
-              key={i}
-              className='flex flex-col items-center gap-2 min-w-[120px] group relative cursor-pointer'
-              aria-label={s.name}
-              title={s.name}
+              key={metric.label}
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center"
             >
-              <span
-                className='transition-all duration-300 transform group-hover:scale-110'
-                style={{
-                  filter: "drop-shadow(0 0 0 rgba(0,0,0,0))",
-                }}
-              >
-                <div
-                  className="transition-all duration-300"
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.filter = `drop-shadow(0 0 20px ${s.color})`;
-                    e.currentTarget.style.color = s.color;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.filter = "drop-shadow(0 0 0 rgba(0,0,0,0))";
-                    e.currentTarget.style.color = ""; // reset to inherited
-                  }}
-                >
-                  {s.icon}
-                </div>
-              </span>
-
-              {/* Stats Tooltip */}
-              <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 bg-gray-900 border border-white/10 p-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-xs font-bold text-white">{s.name}</span>
-                  <span className="text-xs font-mono text-gray-400">{s.level}%</span>
-                </div>
-                <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden relative">
-                  <div
-                    className="h-full absolute top-0 left-0 rounded-full transition-all duration-1000 delay-200 ease-out w-0 group-hover:w-[var(--skill-level)]"
-                    style={{
-                      '--skill-level': `${s.level}%`,
-                      backgroundColor: s.color,
-                    }}
-                  />
-                </div>
-              </div>
-
-
-              <p className='text-sm group-hover:text-white transition-colors duration-300'>
-                {s.name}
-              </p>
+              <p className="text-xs uppercase tracking-[0.12em] text-slate-400">{metric.label}</p>
+              <p className="mt-1 text-lg font-bold text-white">{metric.value}</p>
             </div>
           ))}
         </motion.div>
 
-
-      </div>
-
-      <div className="w-full max-w-5xl px-6 mt-16 text-center z-10">
-        <h3 className="text-2xl font-semibold mb-6 text-gray-300">Soft Skills</h3>
-        <div className="flex flex-wrap justify-center gap-4">
-          {["Problem-Solving", "Team Player", "Adaptability", "Critical Thinking"].map((skill, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.1, duration: 0.4 }}
-              className="bg-white/10 hover:bg-white/20 border border-white/5 px-6 py-2 rounded-full text-white/90 text-sm sm:text-base font-medium transition-all"
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          {groupedSkills.map((group, groupIndex) => (
+            <motion.article
+              key={group.title}
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.45, delay: groupIndex * 0.08 }}
+              className="rounded-2xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-md sm:p-6"
             >
-              {skill}
-            </motion.span>
+              <h3 className="text-2xl font-black text-white">{group.title}</h3>
+              <p className="mt-1 text-sm text-cyan-100/85">{group.emphasis}</p>
+
+              <div className="mt-5 space-y-3">
+                {group.items.map((skill) => {
+                  const Icon = skill.icon;
+
+                  return (
+                    <div
+                      key={`${group.title}-${skill.name}`}
+                      className="rounded-xl border border-slate-700/75 bg-slate-900/75 p-3"
+                    >
+                      <div className="mb-2 flex items-center justify-between">
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-xl" style={{ color: skill.color }}>
+                            <Icon />
+                          </span>
+                          <span className="text-sm font-semibold text-slate-100">{skill.name}</span>
+                        </div>
+                        <span className="text-xs font-mono text-slate-300">{skill.level}%</span>
+                      </div>
+
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-700">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${skill.level}%` }}
+                          viewport={{ once: true, amount: 0.6 }}
+                          transition={{ duration: 0.7, ease: "easeOut" }}
+                          className="h-full rounded-full"
+                          style={{ backgroundColor: skill.color }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.article>
           ))}
         </div>
-      </div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.45, delay: 0.08 }}
+          className="mt-8 rounded-2xl border border-white/10 bg-slate-950/60 p-5 text-center shadow-[0_20px_70px_rgba(2,6,23,0.4)]"
+        >
+          <h3 className="text-xl font-bold text-white">Professional Strengths</h3>
+          <div className="mt-4 flex flex-wrap justify-center gap-3">
+            {softSkills.map((skill) => (
+              <span
+                key={skill}
+                className="rounded-full border border-cyan-300/35 bg-cyan-300/10 px-4 py-1.5 text-sm font-semibold text-cyan-100"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+      </div>
     </section>
-  )
+  );
 }

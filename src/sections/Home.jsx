@@ -1,15 +1,15 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import avatar from "../assets/avator.png";
 import { FaLinkedinIn, FaGithub, FaEnvelope, FaWhatsapp } from "react-icons/fa6";
 import ParticleBackground from "../components/ParticlesBackground";
+import ResumeViewerModal from "../components/ResumeViewerModal";
 
 const socials = [
-  { Icon: FaLinkedinIn, label: "LinkedIn", href: "https://linkedin.com/in/viveks51" },
-  { Icon: FaGithub, label: "GitHub", href: "https://github.com/VivekS51" },
-  { Icon: FaEnvelope, label: "Email", href: "mailto:viveksagar51@gmail.com" },
-  { Icon: FaWhatsapp, label: "WhatsApp", href: "https://wa.me/918002183838" },
+  { Icon: FaLinkedinIn, label: "LinkedIn", href: "https://www.linkedin.com/in/mantu-kumar2004" },
+  { Icon: FaGithub, label: "GitHub", href: "https://github.com/Mantu-09" },
+  { Icon: FaEnvelope, label: "Email", href: "mailto:mantukumar0003571@gmail.com" },
+  { Icon: FaWhatsapp, label: "WhatsApp", href: "https://wa.me/917366832058" },
 ];
 
 
@@ -30,8 +30,9 @@ const glowVariants = {
 };
 
 const Home = React.forwardRef((props, ref) => {
+  const [showResumeViewer, setShowResumeViewer] = useState(false);
   const roles = useMemo(
-    () => ["Cloud Engineer", "Web Developer", "DevOps Engineer"],
+    () => ["Full Stack Developer", "React & Node.js Developer", "CSE Student"],
     []
   );
   const [index, setIndex] = useState(0);
@@ -55,11 +56,12 @@ const Home = React.forwardRef((props, ref) => {
   }, [subIndex, deleting, index, roles]);
 
   return (
-    <section
-      ref={ref}
-      id="home"
-      className="h-screen w-full relative overflow-hidden bg-black"
-    >
+    <>
+      <section
+        ref={ref}
+        id="home"
+        className="h-screen w-full relative overflow-hidden bg-black"
+      >
       <ParticleBackground />
 
       {/* gradient blobs */}
@@ -97,6 +99,16 @@ const Home = React.forwardRef((props, ref) => {
           transition={{ duration: 1.2, ease: "easeOut" }}
         >
           <div className="w-full lg:pr-24 mx-auto max-w-[48rem]">
+            {/* Mobile-only small avatar */}
+            <motion.div
+              className="lg:hidden w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border-2 border-[#1CD8D2]/30 shadow-[0_0_20px_rgba(28,216,210,0.2)]"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
+              <img src="/images/avator.webp" alt="Mantu Kumar profile" className="w-full h-full object-cover" />
+            </motion.div>
+
             {/* typing text */}
             <motion.div
               className="mb-3 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-white tracking-wide min-h-[1.6em]"
@@ -122,7 +134,7 @@ const Home = React.forwardRef((props, ref) => {
               Hello, I&apos;m
               <br />
               <span className="text-white font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl lg:whitespace-nowrap">
-                Vivek Sagar
+                Mantu Kumar
               </span>
             </motion.h1>
 
@@ -133,8 +145,8 @@ const Home = React.forwardRef((props, ref) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.8 }}
             >
-              Building scalable, secure, and high-performance cloud infrastructure using modern DevOps practices.
-              Focused on automation, reliability, and continuous improvement across cloud environments.
+              MERN Stack Developer building scalable full-stack applications with real-world impact.
+              Passionate about performance, clean architecture, and seamless user experiences.
             </motion.p>
 
             {/* buttons */}
@@ -152,13 +164,22 @@ const Home = React.forwardRef((props, ref) => {
               >
                 View My Work
               </a>
+              <button
+                type="button"
+                onClick={() => setShowResumeViewer(true)}
+                className="px-6 py-3 rounded-full text-lg font-medium text-white 
+                bg-gradient-to-r from-[#3b82f6] to-[#06b6d4]
+                shadow-lg hover:scale-105 transition-all"
+              >
+                View Resume
+              </button>
               <a
-                href="/Vivek_Sagar_Resume.pdf"
-                download="Vivek_Sagar_Resume.pdf"
+                href="/Resume.pdf"
+                download="Resume.pdf"
                 className="px-6 py-3 rounded-full text-lg font-medium text-black bg-white 
                 hover:bg-gray-200 shadow-lg hover:scale-105 transition-all"
               >
-                My Resume
+                Download Resume
               </a>
             </motion.div>
 
@@ -210,8 +231,8 @@ const Home = React.forwardRef((props, ref) => {
             }}
           />
           <motion.img
-            src={avatar}
-            alt="Vivek Sagar avatar"
+            src="/images/avator.webp"
+            alt="Mantu Kumar avatar"
             className="absolute top-1/2 -translate-y-1/2 object-contain select-none pointer-events-none"
             style={{ right: "-30px", width: "min(45vw, 780px)", maxHeight: "90vh" }}
             initial={{ opacity: 0, y: 40, scale: 0.95 }}
@@ -221,6 +242,14 @@ const Home = React.forwardRef((props, ref) => {
         </motion.div>
       </div>
     </section>
+
+      <ResumeViewerModal
+        isOpen={showResumeViewer}
+        onClose={() => setShowResumeViewer(false)}
+        resumeUrl="/Resume.pdf"
+        title="Resume Preview"
+      />
+    </>
   );
 });
 

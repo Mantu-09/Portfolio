@@ -1,125 +1,164 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { FaCertificate } from "react-icons/fa";
 import { SiOracle } from "react-icons/si";
-
-// Framer Motion variants for card animations
-const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: (i) => ({
-        opacity: 1,
-        y: 0,
-        transition: {
-            delay: i * 0.1,
-            duration: 0.5,
-            ease: "easeOut",
-        },
-    }),
-};
 
 const certifications = [
     {
-        title: "Oracle Cloud Infrastructure 2025 Certified DevOps Professional",
+        title: "NPTEL Cloud Computing",
+        issuer: "NPTEL",
+        date: "2025",
+        link: "/certificates/Cloud_Computing_Certification.pdf",
+        gradient: "from-emerald-400/25 to-teal-500/25",
+        tag: "Cloud",
+    },
+    {
+        title: "Oracle Cloud Infrastructure AI Foundations Associate",
         issuer: "Oracle",
-        date: "Sep 2025",
+        date: "2025",
+        link: "/certificates/Oracle_Ai_Foundations.pdf",
+        gradient: "from-blue-500/25 to-cyan-400/25",
+        tag: "AI",
+    },
+    {
+        title: "Oracle Data Science Certificate",
+        issuer: "Oracle",
+        date: "2025",
+        link: "/certificates/Oracle Data Science Certificate.pdf",
+        gradient: "from-fuchsia-500/25 to-purple-500/25",
+        tag: "Generative AI",
+    },
+    {
+        title: "Oracle Cloud Infrastructure DevOps",
+        issuer: "Oracle",
+        date: "2025",
         link: "/certificates/Oracle_DevOps.pdf",
-        color: "from-red-500 to-orange-600",
+        gradient: "from-indigo-500/25 to-sky-500/25",
+        tag: "DevOps",
     },
     {
-        title: "Oracle Cloud Infrastructure 2025 Certified Generative AI Professional",
+        title: "MySQL HeatWave",
         issuer: "Oracle",
-        date: "Sep 2025",
-        link: "/certificates/Oracle_GenAI.pdf",
-        color: "from-blue-500 to-cyan-500",
-    },
-    {
-        title: "Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate",
-        issuer: "Oracle",
-        date: "Sep 2025",
-        link: "/certificates/Oracle_AI_Foundations.pdf",
-        color: "from-purple-500 to-pink-500",
-    },
-    {
-        title: "MySQL HeatWave Implementation Certified Associate Rel 1",
-        issuer: "Oracle",
-        date: "Sep 2025",
+        date: "2025",
         link: "/certificates/MySQL_HeatWave.pdf",
-        color: "from-yellow-400 to-orange-500",
+        gradient: "from-amber-400/25 to-orange-500/25",
+        tag: "Database",
     },
+    
+];
+
+const keyStats = [
+    { label: "Verified Certifications", value: "5" },
+    { label: "Cloud and AI Focus", value: "Oracle + NPTEL" },
+    { label: "Domains", value: "AI, Cloud, DevOps, DB" },
 ];
 
 export default function Certifications() {
     return (
         <section
             id="certifications"
-            className="min-h-screen w-full bg-black text-white flex flex-col items-center justify-center px-6 py-20 relative overflow-hidden"
+            className="relative overflow-hidden px-4 py-24 text-white sm:px-6 lg:px-10"
+            style={{
+                background:
+                    "radial-gradient(850px circle at 8% -12%, rgba(38,107,255,0.3), transparent 45%), radial-gradient(900px circle at 90% 12%, rgba(17,188,193,0.22), transparent 46%), linear-gradient(180deg, #020916 0%, #031025 60%, #031127 100%)",
+            }}
         >
-            {/* Background Effect */}
-            <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-900/10 rounded-full blur-[120px]" />
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[120px]" />
-            </div>
+            <div className="pointer-events-none absolute left-[-120px] top-14 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
+            <div className="pointer-events-none absolute right-[-120px] top-12 h-80 w-80 rounded-full bg-blue-500/10 blur-3xl" />
 
-            <motion.h2
-                className="text-4xl sm:text-5xl font-bold mb-16 z-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-gray-200 to-gray-400"
-                initial={{ opacity: 0, y: -20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-            >
-                Certifications
-            </motion.h2>
+            <div className="relative mx-auto w-full max-w-7xl">
+                <motion.div
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.35 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center"
+                >
+                    <p className="inline-flex rounded-full border border-cyan-300/40 bg-cyan-300/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100">
+                        Credentials
+                    </p>
+                    <h2 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+                        Certifications
+                    </h2>
+                    <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-blue-100/85 sm:text-base">
+                        Validated credentials in cloud infrastructure, AI, and data technologies that reinforce
+                        practical engineering capability.
+                    </p>
+                </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl w-full z-10">
-                {certifications.map((cert, i) => (
-                    <motion.div
-                        key={i}
-                        custom={i}
-                        variants={cardVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                        whileHover={{ scale: 1.02 }}
-                        className="relative group bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm overflow-hidden"
-                    >
+                <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.45, delay: 0.08 }}
+                    className="mt-8 grid gap-3 sm:grid-cols-3"
+                >
+                    {keyStats.map((stat) => (
                         <div
-                            className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${cert.color} opacity-10 rounded-bl-full transition-opacity group-hover:opacity-20`}
-                        />
-
-                        <div className="flex items-start justify-between mb-4">
-                            <SiOracle className="text-4xl text-red-500" />
-                            <span className="text-sm font-mono text-gray-400 border border-white/10 px-2 py-1 rounded-full">
-                                {cert.date}
-                            </span>
-                        </div>
-
-                        <h3 className="text-xl font-bold mb-2 pr-8">{cert.title}</h3>
-                        <p className="text-gray-400 mb-6">Issued by {cert.issuer}</p>
-
-                        <a
-                            href={cert.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-red-400 transition-colors"
+                            key={stat.label}
+                            className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center"
                         >
-                            View Certificate
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                />
-                            </svg>
-                        </a>
-                    </motion.div>
-                ))}
+                            <p className="text-xs uppercase tracking-[0.12em] text-slate-400">{stat.label}</p>
+                            <p className="mt-1 text-base font-bold text-white">{stat.value}</p>
+                        </div>
+                    ))}
+                </motion.div>
+
+                <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    {certifications.map((cert, index) => (
+                        <motion.article
+                            key={`${cert.title}-${cert.issuer}`}
+                            initial={{ opacity: 0, y: 24 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.2 }}
+                            transition={{ duration: 0.45, delay: index * 0.06 }}
+                            className="group relative overflow-hidden rounded-2xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-md"
+                        >
+                            <div
+                                className={`absolute inset-x-0 top-0 h-20 bg-gradient-to-r ${cert.gradient} opacity-50 blur-2xl transition-opacity duration-300 group-hover:opacity-80`}
+                            />
+
+                            <div className="relative flex items-start justify-between gap-3">
+                                <div className="flex items-center gap-2">
+                                    {cert.issuer === "Oracle" ? (
+                                        <SiOracle className="text-2xl text-red-400" />
+                                    ) : (
+                                        <FaCertificate className="text-xl text-emerald-300" />
+                                    )}
+                                    <span className="rounded-full border border-cyan-300/35 bg-cyan-300/10 px-2.5 py-1 text-[11px] font-semibold text-cyan-100">
+                                        {cert.tag}
+                                    </span>
+                                </div>
+
+                                <span className="rounded-full border border-white/20 bg-white/5 px-2.5 py-1 text-[11px] font-semibold text-slate-200">
+                                    {cert.date}
+                                </span>
+                            </div>
+
+                            <h3 className="relative mt-4 text-lg font-bold leading-snug text-white">{cert.title}</h3>
+                            <p className="relative mt-2 text-sm text-slate-300">Issued by {cert.issuer}</p>
+
+                            <div className="relative mt-5 flex gap-2">
+                                <a
+                                    href={cert.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-white"
+                                >
+                                    View Certificate
+                                </a>
+                                <a
+                                    href={cert.link}
+                                    download
+                                    className="inline-flex items-center justify-center rounded-md border border-white/30 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-white/10"
+                                >
+                                    Download
+                                </a>
+                            </div>
+                        </motion.article>
+                    ))}
+                </div>
             </div>
         </section>
     );

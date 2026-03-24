@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import IntroAnimation from "./components/IntroAnimation";
 import Navbar from "./components/Navbar";
 import CustomCursor from "./components/CustomCursor";
@@ -14,8 +15,36 @@ import Timezone from "./sections/Timezone";
 import Contact from "./sections/Contact";
 import Footer from "./sections/Footer";
 import WhatsAppPopup from "./components/WhatsAppPopup";
+import ProjectDetails from "./pages/ProjectDetails";
 
-export default function App() {
+function ScrollToHash() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      return;
+    }
+
+    if (!hash) {
+      return;
+    }
+
+    const targetId = hash.replace("#", "");
+    const target = document.getElementById(targetId);
+
+    if (!target) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [pathname, hash]);
+
+  return null;
+}
+
+function PortfolioHome() {
   const [introDone, setIntroDone] = useState(false);
 
   return (
@@ -23,12 +52,9 @@ export default function App() {
       <CustomCursor />
       <Navbar />
 
-      {/* Intro always on top until it finishes */}
       {!introDone && <IntroAnimation onFinish={() => setIntroDone(true)} />}
 
-      {/* Homepage always present (masked reveal) */}
       <Home introDone={introDone} />
-
       <About />
       <Skills />
       <Projects />
@@ -41,5 +67,18 @@ export default function App() {
       <Footer />
       <WhatsAppPopup />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <>
+      <ScrollToHash />
+      <Routes>
+        <Route path="/" element={<PortfolioHome />} />
+        <Route path="/projects/:projectId" element={<ProjectDetails />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 }

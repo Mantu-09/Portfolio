@@ -54,7 +54,7 @@ export default function WhatsAppPopup() {
 
                     {/* WhatsApp Icon Button */}
                     <motion.a
-                        href="https://wa.me/918002183838"
+                        href="https://wa.me/919430260097"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-[#25D366] text-white p-4 rounded-full shadow-lg cursor-pointer hover:bg-[#20bd5a] transition-colors flex items-center justify-center"

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Mantu Kumar Portfolio</title>
+  <desc id="desc">Portfolio preview card showing projects, skills, and full-stack developer branding.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#041130" />
+      <stop offset="55%" stop-color="#0b2a63" />
+      <stop offset="100%" stop-color="#0a7f9c" />
+    </linearGradient>
+    <radialGradient id="glowA" cx="15%" cy="15%" r="55%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.42" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glowB" cx="85%" cy="85%" r="55%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.36" />
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0" />
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#031023" flood-opacity="0.55" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#glowA)" />
+  <rect width="1200" height="630" fill="url(#glowB)" />
+
+  <g opacity="0.24" stroke="#7dd3fc" stroke-width="1.25">
+    <path d="M0 90H1200" />
+    <path d="M0 190H1200" />
+    <path d="M0 290H1200" />
+    <path d="M0 390H1200" />
+    <path d="M0 490H1200" />
+    <path d="M140 0V630" />
+    <path d="M340 0V630" />
+    <path d="M540 0V630" />
+    <path d="M740 0V630" />
+    <path d="M940 0V630" />
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="86" y="74" rx="28" ry="28" width="1028" height="482" fill="#06173a" fill-opacity="0.72" stroke="#67e8f9" stroke-opacity="0.35" />
+  </g>
+
+  <g transform="translate(130 148)">
+    <text x="0" y="0" fill="#a5f3fc" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="3">
+      MANTU KUMAR
+    </text>
+    <text x="0" y="84" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="76" font-weight="800">
+      Full Stack Developer
+    </text>
+    <text x="0" y="148" fill="#dbeafe" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="500">
+      Projects • Skills • Experience • Certifications
+    </text>
+
+    <g transform="translate(0 210)">
+      <rect x="0" y="0" width="244" height="56" rx="28" fill="#0ea5e9" />
+      <text x="32" y="37" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="27" font-weight="700">
+        mantu portfolio
+      </text>
+    </g>
+
+    <g transform="translate(668 24)">
+      <rect x="0" y="0" width="268" height="268" rx="28" fill="#08214d" stroke="#67e8f9" stroke-opacity="0.45" />
+      <path d="M66 175L130 92L148 126L190 78L205 86L150 196L132 162L95 206Z" fill="#22d3ee" />
+      <circle cx="164" cy="126" r="10" fill="#f0f9ff" />
+      <circle cx="112" cy="189" r="8" fill="#e0f2fe" />
+    </g>
+  </g>
+</svg>
