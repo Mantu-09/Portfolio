@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability report
+    url: mailto:mantukumar0003571@gmail.com?subject=Security%20Vulnerability%20Report%20-%20Portfolio
+    about: Report security vulnerabilities privately via email
